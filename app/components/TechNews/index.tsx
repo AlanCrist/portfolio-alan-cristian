@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Article } from "../../types";
-import { FaExternalLinkAlt, FaClock } from "react-icons/fa";
+import { FaExternalLinkAlt, FaClock, FaNewspaper } from "react-icons/fa";
 
 interface TechNewsSectionProps {
   articles: Article[];
@@ -12,15 +12,43 @@ const TechNewsSection: React.FC<TechNewsSectionProps> = ({ articles }) => {
   if (!articles.length) return null;
 
   return (
-    <section id="tech-news" className="bg-white py-20 px-10">
-      <div className="container mx-auto max-w-7xl">
-        <h2 className="text-4xl font-bold text-center mb-4 text-indigo-950">
-          Latest Tech News
-        </h2>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Stay up to date with the latest technology trends and developments.
-          Updated daily from the dev community.
-        </p>
+    <section
+      id="tech-news"
+      className="section-padding"
+      style={{ background: "var(--bg-secondary)" }}
+    >
+      <div className="container mx-auto max-w-6xl">
+        <motion.div
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <div className="flex items-center justify-center gap-3 mb-3">
+            <FaNewspaper style={{ color: "var(--accent-light)" }} />
+            <h2
+              className="font-heading text-sm uppercase tracking-widest"
+              style={{ color: "var(--accent-light)" }}
+            >
+              Stay Updated
+            </h2>
+          </div>
+          <h3
+            className="font-heading text-4xl lg:text-5xl font-bold mb-4"
+            style={{ color: "var(--text-primary)" }}
+          >
+            Latest Tech <span className="gradient-text">News</span>
+          </h3>
+          <p
+            className="max-w-xl mx-auto"
+            style={{ color: "var(--text-secondary)" }}
+          >
+            Stay up to date with the latest technology trends and developments.
+            Updated daily from the dev community.
+          </p>
+        </motion.div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article, index) => (
             <motion.a
@@ -28,45 +56,59 @@ const TechNewsSection: React.FC<TechNewsSectionProps> = ({ articles }) => {
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gray-50 rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 block"
-              initial={{ opacity: 0, y: 30 }}
+              className="card-base overflow-hidden block group"
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.1 }}
-              whileHover={{ y: -5 }}
+              whileHover={{ y: -8 }}
             >
               {article.cover_image && (
-                <img
-                  src={article.cover_image}
-                  alt={article.title}
-                  className="w-full h-44 object-cover"
-                />
+                <div className="overflow-hidden">
+                  <img
+                    src={article.cover_image}
+                    alt={article.title}
+                    className="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                </div>
               )}
               <div className="p-6">
-                <div className="flex items-center gap-2 text-xs text-gray-500 mb-3">
-                  <FaClock />
-                  <span>
-                    {new Date(article.published_at).toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
+                <div className="flex items-center gap-2 text-xs mb-3">
+                  <FaClock style={{ color: "var(--text-muted)" }} />
+                  <span style={{ color: "var(--text-muted)" }}>
+                    {new Date(article.published_at).toLocaleDateString(
+                      "en-US",
+                      { month: "short", day: "numeric", year: "numeric" }
+                    )}
                   </span>
-                  <span className="ml-auto flex items-center gap-1 text-indigo-600">
+                  <span
+                    className="ml-auto flex items-center gap-1"
+                    style={{ color: "var(--accent-light)" }}
+                  >
                     <FaExternalLinkAlt className="text-[10px]" /> Read
                   </span>
                 </div>
-                <h3 className="text-lg font-bold text-indigo-950 mb-2 line-clamp-2">
+                <h4
+                  className="font-heading text-lg font-bold mb-2 line-clamp-2"
+                  style={{ color: "var(--text-primary)" }}
+                >
                   {article.title}
-                </h3>
-                <p className="text-gray-600 text-sm line-clamp-3">
+                </h4>
+                <p
+                  className="text-sm line-clamp-3"
+                  style={{ color: "var(--text-secondary)" }}
+                >
                   {article.description}
                 </p>
-                <div className="flex flex-wrap gap-1 mt-4">
+                <div className="flex flex-wrap gap-1.5 mt-4">
                   {article.tag_list.slice(0, 3).map((tag) => (
                     <span
                       key={tag}
-                      className="bg-indigo-100 text-indigo-700 text-xs px-2 py-0.5 rounded-full"
+                      className="text-xs px-2.5 py-0.5 rounded-full"
+                      style={{
+                        background: "var(--tag-bg)",
+                        color: "var(--tag-text)",
+                      }}
                     >
                       #{tag}
                     </span>

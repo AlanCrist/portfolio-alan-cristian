@@ -14,11 +14,7 @@ import { Article } from "./types";
 import { getGpt4GeneratedSummary } from "./services/openai";
 import { fetchNewsFromGNews } from "./services/gnews";
 
-interface HomePageProps {
-  news: Article[];
-}
-
-const Home: React.FC<HomePageProps> = () => {
+const Home = () => {
   const [open, setOpen] = useState(false);
 
   const textAnimation = useSpring({

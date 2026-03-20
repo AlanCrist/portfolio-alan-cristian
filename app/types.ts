@@ -17,4 +17,5 @@ export interface Project {
   github?: string;
   live?: string;
   image: string;
+  demoUrl?: string;
 }

@@ -26,6 +26,14 @@ const projects: Project[] = [
     demoUrl: process.env.NEXT_PUBLIC_DEMO_TAREFAS_FUN,
   },
   {
+    title: "ONG OAC Visão",
+    description:
+      "Site institucional para a ONG OAC Visão. Apresentação da organização, projetos sociais e informações para doadores e voluntários.",
+    tech: ["React", "Tailwind CSS"],
+    image: "/project-oac-visao.png",
+    demoUrl: process.env.NEXT_PUBLIC_DEMO_OAC_VISAO,
+  },
+  {
     title: "Streamflix",
     description:
       "Frontend de plataforma de streaming para descobrir e gerenciar conteúdos. Interface moderna com animações fluidas e navegação intuitiva.",

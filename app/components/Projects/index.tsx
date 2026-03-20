@@ -88,7 +88,7 @@ const ProjectsSection = () => {
               <motion.div
                 key={index}
                 layoutId={`project-card-${index}`}
-                className="card-base overflow-hidden group"
+                className="card-base overflow-hidden group flex flex-col"
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -124,7 +124,7 @@ const ProjectsSection = () => {
                   />
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <h4
                     className="font-heading text-xl font-bold mb-3"
                     style={{ color: "var(--text-primary)" }}
@@ -137,7 +137,7 @@ const ProjectsSection = () => {
                   >
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-5">
+                  <div className="flex flex-wrap gap-2 mb-5 mt-auto">
                     {project.tech.map((t) => (
                       <span
                         key={t}

@@ -65,15 +65,22 @@ const ProgrammingTipsSection: React.FC<ProgrammingTipsSectionProps> = ({
               transition={{ duration: 0.4, delay: index * 0.1 }}
               whileHover={{ y: -8 }}
             >
-              {article.cover_image && (
-                <div className="overflow-hidden">
+              <div className="overflow-hidden h-44 relative">
+                {article.cover_image || article.social_image ? (
                   <img
-                    src={article.cover_image}
+                    src={article.cover_image || article.social_image}
                     alt={article.title}
-                    className="w-full h-44 object-cover transition-transform duration-500 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                </div>
-              )}
+                ) : (
+                  <div
+                    className="w-full h-full flex items-center justify-center"
+                    style={{ background: "var(--accent-gradient)" }}
+                  >
+                    <FaLightbulb className="text-white/20 text-5xl" />
+                  </div>
+                )}
+              </div>
               <div className="p-6">
                 <div className="flex items-center gap-2 text-xs mb-3">
                   <FaClock style={{ color: "var(--text-muted)" }} />

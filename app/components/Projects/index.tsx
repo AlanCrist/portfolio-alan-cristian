@@ -26,6 +26,14 @@ const projects: Project[] = [
     demoUrl: process.env.NEXT_PUBLIC_DEMO_TAREFAS_FUN,
   },
   {
+    title: "ONG OAC Visão",
+    description:
+      "Site institucional para a ONG OAC Visão. Apresentação da organização, projetos sociais e informações para doadores e voluntários.",
+    tech: ["React", "Tailwind CSS"],
+    image: "/project-oac-visao.png",
+    demoUrl: process.env.NEXT_PUBLIC_DEMO_OAC_VISAO,
+  },
+  {
     title: "Streamflix",
     description:
       "Frontend de plataforma de streaming para descobrir e gerenciar conteúdos. Interface moderna com animações fluidas e navegação intuitiva.",
@@ -80,7 +88,7 @@ const ProjectsSection = () => {
               <motion.div
                 key={index}
                 layoutId={`project-card-${index}`}
-                className="card-base overflow-hidden group"
+                className="card-base overflow-hidden group flex flex-col"
                 initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -116,7 +124,7 @@ const ProjectsSection = () => {
                   />
                 </div>
 
-                <div className="p-6">
+                <div className="p-6 flex flex-col flex-1">
                   <h4
                     className="font-heading text-xl font-bold mb-3"
                     style={{ color: "var(--text-primary)" }}
@@ -129,7 +137,7 @@ const ProjectsSection = () => {
                   >
                     {project.description}
                   </p>
-                  <div className="flex flex-wrap gap-2 mb-5">
+                  <div className="flex flex-wrap gap-2 mb-5 mt-auto">
                     {project.tech.map((t) => (
                       <span
                         key={t}

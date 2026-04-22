@@ -3,7 +3,6 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { animated, useSpring } from "react-spring";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import Image from "next/image";
 import Header from "./Header";
 import About from "./About";
 import ProjectsSection from "./Projects";
@@ -11,8 +10,6 @@ import TechNewsSection from "./TechNews";
 import ProgrammingTipsSection from "./ProgrammingTips";
 import ContactSection from "./Contact";
 import Footer from "./Footer";
-import profilePic from "../assets/ai.jpg";
-import background from "../assets/background.jpg";
 import { Article } from "../types";
 
 interface HomeClientProps {
@@ -20,8 +17,17 @@ interface HomeClientProps {
   tips: Article[];
 }
 
+const glitchBlocks = [
+  { left: "5%",  top: "18%", width: "65%", height: "7%", delay: 0,   duration: 0.12 },
+  { left: "0%",  top: "42%", width: "45%", height: "5%", delay: 1.8, duration: 0.09 },
+  { left: "25%", top: "68%", width: "60%", height: "6%", delay: 3.2, duration: 0.15 },
+  { left: "10%", top: "55%", width: "35%", height: "4%", delay: 0.7, duration: 0.11 },
+  { left: "40%", top: "30%", width: "50%", height: "6%", delay: 4.1, duration: 0.13 },
+];
+
 const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
   const [open, setOpen] = useState(false);
+  const [profileVideoError, setProfileVideoError] = useState(false);
 
   const textAnimation = useSpring({
     from: { opacity: 0, transform: "translate3d(0, 40px, 0)" },
@@ -29,6 +35,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
   });
 
   // --- Motion blur effect on profile image ---
+  const videoRef = useRef<HTMLVideoElement>(null);
   const imgRef = useRef<HTMLDivElement>(null);
   const lastPos = useRef({ x: 0, y: 0 });
   const resetTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -101,6 +108,50 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    let animId: number;
+    let lastTimestamp = 0;
+    let isReversing = false;
+
+    const scrubBackward = (timestamp: number) => {
+      if (!lastTimestamp) lastTimestamp = timestamp;
+      const delta = (timestamp - lastTimestamp) / 1000;
+      lastTimestamp = timestamp;
+
+      const next = video.currentTime - delta;
+      if (next <= 0) {
+        video.currentTime = 0;
+        isReversing = false;
+        lastTimestamp = 0;
+        video.play();
+        return;
+      }
+
+      video.currentTime = next;
+      animId = requestAnimationFrame(scrubBackward);
+    };
+
+    // catch it ~300ms before the end so the video never freezes on the last frame
+    const handleTimeUpdate = () => {
+      if (!isReversing && video.duration && video.currentTime >= video.duration - 0.3) {
+        video.pause();
+        isReversing = true;
+        lastTimestamp = 0;
+        cancelAnimationFrame(animId);
+        animId = requestAnimationFrame(scrubBackward);
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    return () => {
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      cancelAnimationFrame(animId);
+    };
+  }, []);
+
   return (
     <div>
       {/* SVG filter for directional motion blur */}
@@ -123,14 +174,16 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
           className="relative flex items-center justify-center h-screen text-center overflow-hidden"
           style={{ background: "var(--bg-primary)" }}
         >
-          {/* Background image with overlay */}
-          <Image
-            src={background}
-            alt="Background"
-            fill
-            className="object-cover object-center"
-            priority
-          />
+          {/* Background video with overlay */}
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover object-center"
+          >
+            <source src="/background.mp4" type="video/mp4" />
+          </video>
           <div className="absolute inset-0 bg-black/50" />
 
           {/* Animated gradient orbs */}
@@ -212,7 +265,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
                 className="relative mx-auto cursor-pointer"
-                style={{ width: 220, height: 220 }}
+                style={{ width: 260, height: 260 }}
               >
                 <motion.div
                   style={{
@@ -220,20 +273,74 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
                     y: offsetY,
                     scale: imgScale,
                     filter: filterBlur,
+                    borderRadius: "50%",
+                    overflow: "hidden",
+                    boxShadow: "0 0 40px rgba(124, 58, 237, 0.3)",
+                    border: "3px solid rgba(124, 58, 237, 0.3)",
                   }}
                   className="w-full h-full"
                 >
-                  <Image
-                    src={profilePic}
-                    alt="Alan Cristian"
-                    width={220}
-                    height={220}
-                    className="rounded-full"
+                  {profileVideoError ? (
+                    <img
+                      src="/logo.png"
+                      alt="Alan Cristian"
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <video
+                      autoPlay
+                      muted
+                      loop
+                      playsInline
+                      src="/me.mp4"
+                      className="w-full h-full object-cover"
+                      style={{ objectPosition: "top center" }}
+                      onError={() => setProfileVideoError(true)}
+                    />
+                  )}
+
+                  {/* Scanlines */}
+                  <div
+                    className="absolute inset-0 pointer-events-none"
                     style={{
-                      boxShadow: "0 0 40px rgba(124, 58, 237, 0.3)",
-                      border: "3px solid rgba(124, 58, 237, 0.3)",
+                      background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.07) 3px, rgba(0,0,0,0.07) 4px)",
+                      zIndex: 1,
                     }}
                   />
+
+                  {/* Sweep scan */}
+                  <motion.div
+                    className="absolute left-0 right-0 pointer-events-none"
+                    style={{
+                      height: "22%",
+                      background: "linear-gradient(to bottom, transparent, rgba(124,58,237,0.1), transparent)",
+                      zIndex: 2,
+                    }}
+                    animate={{ top: ["-22%", "122%"] }}
+                    transition={{ duration: 3, repeat: Infinity, ease: "linear", repeatDelay: 2.5 }}
+                  />
+
+                  {/* Glitch blocks */}
+                  {glitchBlocks.map((b, i) => (
+                    <motion.div
+                      key={i}
+                      className="absolute pointer-events-none"
+                      style={{
+                        left: b.left, top: b.top, width: b.width, height: b.height,
+                        background: "var(--accent)",
+                        mixBlendMode: "screen",
+                        zIndex: 3,
+                      }}
+                      animate={{ opacity: [0, 0, 0.3, 0.3, 0] }}
+                      transition={{
+                        duration: b.duration,
+                        repeat: Infinity,
+                        repeatDelay: b.delay + 2,
+                        ease: "linear",
+                        times: [0, 0.45, 0.5, 0.95, 1],
+                      }}
+                    />
+                  ))}
                 </motion.div>
                 {/* Glow rings */}
                 <motion.div

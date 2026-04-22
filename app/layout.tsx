@@ -1,11 +1,12 @@
 import "./globals.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Orbitron, Inter } from "next/font/google";
 import ThemeProvider from "./components/ThemeProvider";
 
-const spaceGrotesk = Space_Grotesk({
+const orbitron = Orbitron({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
   variable: "--font-heading",
   display: "swap",
 });
@@ -29,7 +30,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" data-theme="dark" suppressHydrationWarning>
-      <body className={`${spaceGrotesk.variable} ${inter.variable} font-sans`}>
+      <body className={`${orbitron.variable} ${inter.variable} font-sans`}>
         <ThemeProvider>{children}</ThemeProvider>
       </body>
     </html>

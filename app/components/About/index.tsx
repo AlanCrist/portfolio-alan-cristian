@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import profilePic from "../../assets/profile.jpg";
+import profilePic from "../../assets/logo.png";
 
 const skills = [
   "JavaScript",
@@ -46,6 +46,7 @@ const AboutSection = () => (
               src={profilePic}
               alt="Alan Cristian"
               fill
+              sizes="(max-width: 1024px) 256px, 320px"
               style={{
                 boxShadow: "var(--shadow-lg)",
                 border: "2px solid var(--border)",

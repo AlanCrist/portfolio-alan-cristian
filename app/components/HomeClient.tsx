@@ -257,15 +257,14 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
             }}
           />
 
-          <div className="relative z-10">
+          <div className="relative z-10 pt-16 sm:pt-0">
             <animated.div style={textAnimation}>
               {/* Profile image with motion blur */}
               <div
                 ref={imgRef}
                 onMouseMove={handleMouseMove}
                 onMouseLeave={handleMouseLeave}
-                className="relative mx-auto cursor-pointer"
-                style={{ width: 260, height: 260 }}
+                className="relative mx-auto cursor-pointer w-44 h-44 sm:w-56 sm:h-56 md:w-64 md:h-64 lg:w-72 lg:h-72"
               >
                 <motion.div
                   style={{
@@ -294,7 +293,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
                       playsInline
                       src="/me.mp4"
                       className="w-full h-full object-cover"
-                      style={{ objectPosition: "top center" }}
+                      style={{ objectPosition: "center 0%", transform: "scale(1.8)", transformOrigin: "center top" }}
                       onError={() => setProfileVideoError(true)}
                     />
                   )}
@@ -374,7 +373,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
 
               {/* Title */}
               <motion.h1
-                className="font-heading text-7xl md:text-9xl mt-9 font-bold text-white"
+                className="font-heading text-5xl sm:text-7xl md:text-9xl mt-6 md:mt-9 font-bold text-white"
                 initial={{ opacity: 0, y: 20, letterSpacing: "0.3em" }}
                 animate={{ opacity: 1, y: 0, letterSpacing: "0.05em" }}
                 transition={{ duration: 1.2, delay: 0.3, ease: "easeOut" }}
@@ -385,7 +384,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
 
               {/* Subtitle */}
               <motion.p
-                className="font-heading text-lg md:text-xl mt-4 tracking-[0.3em] uppercase"
+                className="font-heading text-sm sm:text-lg md:text-xl mt-4 tracking-[0.15em] sm:tracking-[0.3em] uppercase"
                 style={{ color: "var(--text-secondary)" }}
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -396,7 +395,7 @@ const HomeClient: React.FC<HomeClientProps> = ({ techNews, tips }) => {
 
               {/* CTA buttons */}
               <motion.div
-                className="flex gap-4 justify-center mt-10"
+                className="flex flex-wrap gap-3 justify-center mt-8 md:mt-10 px-4"
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 1.2 }}
